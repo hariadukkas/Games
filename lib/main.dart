@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'game_provider.dart';
 import 'memory_screen.dart';
-import 'game_screen.dart';
 
 void main() {
   runApp(MyGameApp());

@@ -7,22 +7,23 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final game = Provider.of<GameProvider>(context);
-
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(title: Text('Select Letters in Order')),
       body: Column(
         children: [
-          SizedBox(height: 20),
-          Text("Tap letters in order:", style: TextStyle(fontSize: 18)),
           SizedBox(height: 10),
+          Text("Tap letters in order:", style: TextStyle(fontSize: 18)),
+          SizedBox(height: 5),
           Text(game.selectedAlphabets.join(" "), style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          Expanded(
+          SizedBox(
+            height: screenHeight * 0.6,
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 10),
-              itemCount: 100,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+              itemCount: 25,
               itemBuilder: (context, index) {
-                int row = index ~/ 10;
-                int col = index % 10;
+                int row = index ~/ 5;
+                int col = index % 5;
                 String letter = game.grid[row][col];
 
                 return GestureDetector(

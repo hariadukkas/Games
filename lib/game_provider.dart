@@ -7,18 +7,22 @@ class GameProvider extends ChangeNotifier {
   List<List<String>> grid = [];
 
   void generateAlphabets() {
-    targetAlphabets = List.generate(10, (index) => _randomLetter());
+    targetAlphabets = List.generate(5, (index) => _randomLetter());
     generateGrid();
     notifyListeners();
   }
 
   void generateGrid() {
-    List<String> allLetters = List.generate(100, (index) => _randomLetter());
-    for (int i = 0; i < 10; i++) {
-      allLetters[i] = targetAlphabets[i];  // Ensure correct letters are present
+    int position;
+    Set<int> usedPositions = {};
+    List<String> allLetters = List.generate(25, (index) => _randomLetter());
+    for (int i = 0; i < 5; i++) {
+      do {
+        position = Random().nextInt(25);
+      } while (usedPositions.contains(position));
+      allLetters[position] = targetAlphabets[i];  // Ensure correct letters are present
     }
-    allLetters.shuffle();
-    grid = List.generate(10, (row) => allLetters.sublist(row * 10, (row + 1) * 10));
+    grid = List.generate(5, (row) => allLetters.sublist(row * 5, (row + 1) * 5));
   }
 
   void addSelectedLetter(String letter) {
