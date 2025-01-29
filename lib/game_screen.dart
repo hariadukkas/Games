@@ -8,6 +8,7 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final game = Provider.of<GameProvider>(context);
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -28,7 +29,7 @@ class GameScreen extends StatelessWidget {
               Text(
                 "Select Letters in Order",
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 28, // Slightly smaller text
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                   shadows: [
@@ -43,17 +44,23 @@ class GameScreen extends StatelessWidget {
               SizedBox(height: 10),
               Text(
                 "Tap letters in order:",
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
               SizedBox(height: 5),
               Text(
                 game.selectedAlphabets.join(" "),
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
               ),
               SizedBox(
-                height: screenHeight * 0.6,
+                height: screenHeight * 0.80, // Slightly smaller height
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 6),
+                  padding: EdgeInsets.all(5), // Reduce padding
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 6,
+                    crossAxisSpacing: 4, // Reduce spacing
+                    mainAxisSpacing: 4, // Reduce spacing
+                    childAspectRatio: 1.2, // Adjust size ratio (Increase for smaller squares)
+                  ),
                   itemCount: 36,
                   itemBuilder: (context, index) {
                     int row = index ~/ 6;
@@ -64,19 +71,20 @@ class GameScreen extends StatelessWidget {
                       onTap: () {
                         game.addSelectedLetter(letter);
                         if (game.selectedAlphabets.length == game.targetAlphabets.length) {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultScreen()));
+                          Navigator.pushReplacement(
+                              context, MaterialPageRoute(builder: (_) => ResultScreen()));
                         }
                       },
                       child: Card(
                         color: Colors.deepPurpleAccent.shade100,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8), // Reduce corner radius
                         ),
                         child: Center(
                           child: Text(
                             letter,
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 20, // Slightly smaller font size
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),

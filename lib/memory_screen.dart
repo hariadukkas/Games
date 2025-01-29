@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 import 'game_provider.dart';
 import 'game_screen.dart';
 
@@ -9,17 +10,50 @@ class MemoryScreen extends StatefulWidget {
 }
 
 class _MemoryScreenState extends State<MemoryScreen> {
+  int _remainingSeconds = 10;
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => GameScreen()));
+
+    // Retrieve numSeconds from GameProvider
+    Future.microtask(() {
+      final game = Provider.of<GameProvider>(context, listen: false);
+      _remainingSeconds = game.numSeconds;
+
+      // Start countdown timer
+      _startTimer();
     });
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_remainingSeconds > 1) {
+        setState(() {
+          _remainingSeconds--;
+        });
+      } else {
+        // Navigate to GameScreen when timer reaches zero
+        _timer?.cancel();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => GameScreen()),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final game = Provider.of<GameProvider>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -62,6 +96,15 @@ class _MemoryScreenState extends State<MemoryScreen> {
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Time Remaining: $_remainingSeconds s',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.yellowAccent,
+                  ),
                 ),
               ],
             ),
