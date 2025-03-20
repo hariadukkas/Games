@@ -4,16 +4,16 @@ import 'game_provider.dart';
 import 'main.dart';
 
 class ResultScreen extends StatelessWidget {
-
-
   void _playSound(bool won) async {
-    // await _audioPlayer.play(AssetSource(won ? 'sounds/win.mp3' : 'sounds/lose.mp3'));
+    // Add your sound logic here
   }
 
   @override
   Widget build(BuildContext context) {
     final game = Provider.of<GameProvider>(context, listen: false);
     bool won = game.checkWin();
+    Duration? totalTime = game.getTotalTime();
+
     _playSound(won);
 
     return Scaffold(
@@ -49,6 +49,16 @@ class ResultScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (won) ...[
+                  SizedBox(height: 20),
+                  Text(
+                    'Time Taken: ${totalTime?.inSeconds} seconds',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
                 SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(

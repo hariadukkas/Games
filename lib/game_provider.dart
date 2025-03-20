@@ -7,10 +7,27 @@ class GameProvider extends ChangeNotifier {
   List<List<String>> grid = [];
   int numLetters=5;
   int numSeconds=5;
+  DateTime? _startTime;
+  DateTime? _endTime;
+
+  void setStartTime() {
+    _startTime = DateTime.now();
+    _endTime = null;
+  }
+
+  Duration? getTotalTime() {
+    if (_startTime != null && _endTime != null) {
+      return _endTime!.difference(_startTime!);
+    }
+    return Duration();
+  }
+
+
 
   void generateAlphabets() {
     targetAlphabets = List.generate(numLetters, (index) => _randomLetter());
     generateGrid();
+    setStartTime();
     notifyListeners();
   }
 
@@ -28,6 +45,7 @@ class GameProvider extends ChangeNotifier {
   }
 
   bool checkWin() {
+    _endTime = DateTime.now();
     return selectedAlphabets.join() == targetAlphabets.join();
   }
 
